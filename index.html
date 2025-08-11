@@ -1,282 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dice Roll Game</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #121212;
-            color: #e0e0e0;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-        }
-        .wrapper {
-            text-align: center;
-            border: 1px solid #333;
-            padding: 20px;
-            border-radius: 10px;
-            background: #1e1e1e;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-        input {
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #444;
-            border-radius: 5px;
-            background: #2a2a2a;
-            color: #e0e0e0;
-            text-align: center;
-        }
-        input::placeholder {
-            color: #888;
-        }
-        .dice-area {
-            display: inline-block;
-            margin: 20px;
-        }
-        .dice-area p {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #b0b0b0;
-        }
-        img {
-            width: 100px;
-            height: 100px;
-            margin: 5px;
-            border: 1px solid #444;
-            border-radius: 10px;
-            background: #2a2a2a;
-        }
-        button {
-            margin-top: 15px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            background: #007bff;
-            color: #ffffff;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        #loose {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            color: #ff5252;
-        }
-        #message {
-            font-size: 1.2rem;
-            margin-top: 10px;
-            color: #ffcc00;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dice Roll Game</title>
+<style>
+  
+
+  body {
+    margin: 0; padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+  .wrapper {
+    max-width: 480px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px 20px;
+    background: #f9f9f9;
+    box-sizing: border-box;
+  }
+  h1 {
+    margin: 10px 0 15px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #111;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 10px;
+  }
+  select, input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background: #fff;
+    color: #222;
+  }
+  select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 6px rgba(0,123,255,0.5);
+  }
+  button {
+    padding: 10px 18px;
+    margin: 8px 5px 10px 0;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  #loose {
+    text-align: center;
+    font-size: 1.3rem;
+    margin: 12px 0 8px;
+    color: #d9534f;
+    min-height: 1.5em;
+  }
+  #main-text {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+  }
+  .dice-area {
+    display: inline-block;
+    width: 110px;
+    margin: 8px 8px 20px;
+    vertical-align: top;
+    text-align: center;
+  }
+  .dice-area p {
+    margin: 6px 0 6px;
+    font-weight: 600;
+    color: #333;
+    min-height: 1.3em;
+  }
+  .dice-area img {
+    width: 70px;
+    height: 70px;
+    margin: 3px auto;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+  }
+  /* Скрывать поля и зоны вне количества игроков */
+  input[type="text"].hidden,
+  .dice-area.hidden {
+    display: none !important;
+  }
+</style>
 </head>
-<div class="wrapper">
+<body>
+  <div class="wrapper">
     <h1>Enter names for players</h1>
     <label for="playerCount">Number of players:</label>
     <select id="playerCount">
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4" selected>4</option>
-    </select><br>
-    <input type="text" id="player1" placeholder="Player 1 Name"><br>
-    <input type="text" id="player2" placeholder="Player 2 Name"><br>
-    <input type="text" id="player3" placeholder="Player 3 Name"><br>
-    <input type="text" id="player4" placeholder="Player 4 Name"><br>
-    <button id="start">Start Game</button>
-    <button id="reset">Reset Game</button>
-    <button id="roll">Roll</button>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+    </select>
+
+    <input type="text" id="player1" placeholder="Player 1 Name" />
+    <input type="text" id="player2" placeholder="Player 2 Name" />
+    <input type="text" id="player3" placeholder="Player 3 Name" />
+    <input type="text" id="player4" placeholder="Player 4 Name" />
+
+    <div style="text-align:center;">
+      <button id="start">Start Game</button>
+      <button id="reset">Reset Game</button>
+      <button id="roll">Roll</button>
+    </div>
+
     <h1 id="loose"></h1>
     <h1 id="main-text">Arcade Dice Game</h1>
-    <div id="message"></div>
+
     <div class="dice-area" id="area1">
-        <p id="player-name1"></p>
-        <img>
-        <img>
-        <p id="score1"></p>
+      <p id="player-name1"></p>
+      <img />
+      <img />
+      <p id="score1"></p>
     </div>
     <div class="dice-area" id="area2">
-        <p id="player-name2"></p>
-        <img>
-        <img>
-        <p id="score2"></p>
+      <p id="player-name2"></p>
+      <img />
+      <img />
+      <p id="score2"></p>
     </div>
     <div class="dice-area" id="area3">
-        <p id="player-name3"></p>
-        <img>
-        <img>
-        <p id="score3"></p>
+      <p id="player-name3"></p>
+      <img />
+      <img />
+      <p id="score3"></p>
     </div>
     <div class="dice-area" id="area4">
-        <p id="player-name4"></p>
-        <img>
-        <img>
-        <p id="score4"></p>
+      <p id="player-name4"></p>
+      <img />
+      <img />
+      <p id="score4"></p>
     </div>
-</div>
+  </div>
+
 <script>
-    const resetButton = document.querySelector("#reset");
-    const startButton = document.querySelector("#start");
-    const rollButton = document.querySelector("#roll");
-    const message = document.querySelector("#message");
-    const playerCountSelect = document.querySelector("#playerCount");
+const resetButton = document.querySelector("#reset");
+const startButton = document.querySelector("#start");
+const rollButton = document.querySelector("#roll");
+const message = document.querySelector("#main-text");
+const playerCountSelect = document.querySelector("#playerCount");
 
-    let playerCount = 4;
-    let currentPlayer = 1;
+let playerCount = 4;
+let currentPlayer = 1;
 
-    const ListFirstPlayer = [];
-    const ListSecondPlayer = [];
-    const ListThirdPlayer = [];
-    const ListFourthPlayer = [];
+const ListFirstPlayer = [];
+const ListSecondPlayer = [];
+const ListThirdPlayer = [];
+const ListFourthPlayer = [];
 
-        playerCountSelect.onchange = function () {
-        playerCount = parseInt(playerCountSelect.value);
-        // Show/hide name fields and dice areas
-        for (let i = 1; i <= 4; i++) {
-            document.querySelector(`#player${i}`).style.display = i <= playerCount ? "" : "none";
-            document.querySelector(`#area${i}`).style.display = i <= playerCount ? "inline-block" : "none";
-        }
-    };
-    // Initial call for setup
-    playerCountSelect.onchange();
-
-    resetButton.onclick = resetGame;
-    startButton.onclick = startGame;
-    rollButton.onclick = function () {
-        playGame();
-        loose();
-    };
-
-    function updateMessage(msg) {
-        message.innerText = msg;
+playerCountSelect.onchange = function () {
+  playerCount = parseInt(playerCountSelect.value);
+  for (let i = 1; i <= 4; i++) {
+    const input = document.querySelector(`#player${i}`);
+    const area = document.querySelector(`#area${i}`);
+    if (i <= playerCount) {
+      input.classList.remove("hidden");
+      area.classList.remove("hidden");
+    } else {
+      input.classList.add("hidden");
+      area.classList.add("hidden");
     }
+  }
+};
+playerCountSelect.onchange();
 
-    function loose() {
-        const totalScorePlayer1 = ListFirstPlayer.reduce((sum, current) => sum + current, 0);
-        const totalScorePlayer2 = ListSecondPlayer.reduce((sum, current) => sum + current, 0);
-        const totalScorePlayer3 = ListThirdPlayer.reduce((sum, current) => sum + current, 0);
-        const totalScorePlayer4 = ListFourthPlayer.reduce((sum, current) => sum + current, 0);
+resetButton.onclick = resetGame;
+startButton.onclick = startGame;
+rollButton.onclick = function () {
+  playGame();
+  loose();
+};
 
-        document.querySelector("#score1").innerText = `Score: ${totalScorePlayer1}`;
-        document.querySelector("#score2").innerText = `Score: ${totalScorePlayer2}`;
-        if (playerCount >= 3) document.querySelector("#score3").innerText = `Score: ${totalScorePlayer3}`;
-        if (playerCount === 4) document.querySelector("#score4").innerText = `Score: ${totalScorePlayer4}`;
+function updateMessage(msg) {
+  message.innerText = msg;
+}
 
-        const looseText = document.querySelector("#loose");
-        looseText.textContent = "";
+function isGameOver() {
+  const looseText = document.querySelector("#loose").textContent;
+  return looseText.includes("WINS") || looseText.includes("LOSES");
+}
 
-        if (totalScorePlayer1 >= 100) looseText.textContent = document.querySelector("#player-name1").textContent + " WINS!";
-        else if (totalScorePlayer2 >= 100) looseText.textContent = document.querySelector("#player-name2").textContent + " WINS!";
-        else if (playerCount >= 3 && totalScorePlayer3 >= 100) looseText.textContent = document.querySelector("#player-name3").textContent + " WINS!";
-        else if (playerCount === 4 && totalScorePlayer4 >= 100) looseText.textContent = document.querySelector("#player-name4").textContent + " WINS!";
+function loose() {
+  const totalScorePlayer1 = ListFirstPlayer.reduce((sum, cur) => sum + cur, 0);
+  const totalScorePlayer2 = ListSecondPlayer.reduce((sum, cur) => sum + cur, 0);
+  const totalScorePlayer3 = ListThirdPlayer.reduce((sum, cur) => sum + cur, 0);
+  const totalScorePlayer4 = ListFourthPlayer.reduce((sum, cur) => sum + cur, 0);
+
+  document.querySelector("#score1").innerText = `Score: ${totalScorePlayer1}`;
+  document.querySelector("#score2").innerText = `Score: ${totalScorePlayer2}`;
+  if (playerCount >= 3) document.querySelector("#score3").innerText = `Score: ${totalScorePlayer3}`;
+  if (playerCount === 4) document.querySelector("#score4").innerText = `Score: ${totalScorePlayer4}`;
+
+  const looseText = document.querySelector("#loose");
+  if (!isGameOver()) {
+    looseText.textContent = "";
+    if (totalScorePlayer1 >= 100) looseText.textContent = document.querySelector("#player-name1").textContent + " WINS!";
+    else if (totalScorePlayer2 >= 100) looseText.textContent = document.querySelector("#player-name2").textContent + " WINS!";
+    else if (playerCount >= 3 && totalScorePlayer3 >= 100) looseText.textContent = document.querySelector("#player-name3").textContent + " WINS!";
+    else if (playerCount === 4 && totalScorePlayer4 >= 100) looseText.textContent = document.querySelector("#player-name4").textContent + " WINS!";
+  }
+}
+
+function startGame() {
+  const names = [];
+  for (let i = 1; i <= playerCount; i++) {
+    const name = document.querySelector(`#player${i}`).value.trim();
+    if (!name) {
+      updateMessage("Please enter names for all players!");
+      return;
     }
+    names.push(name);
+    document.querySelector(`#player-name${i}`).textContent = name;
+  }
+  for (let i = playerCount + 1; i <= 4; i++) {
+    document.querySelector(`#player-name${i}`).textContent = "";
+    document.querySelector(`#score${i}`).innerText = "";
+  }
+  saveNames(names);
+  currentPlayer = 1;
+  updateMessage(`Current turn: ${names[0]}`);
+  document.querySelector("#loose").textContent = ""; // очистить сообщение о победителе/проигрыше при старте
+}
 
-    function startGame() {
-        const names = [];
-        for (let i = 1; i <= playerCount; i++) {
-            const name = document.querySelector(`#player${i}`).value.trim();
-            if (!name) {
-                updateMessage("Please enter names for all players!");
-                return;
-            }
-            names.push(name);
-            document.querySelector(`#player-name${i}`).textContent = name;
-        }
-        // Clear names and scores for inactive players
-        for (let i = playerCount + 1; i <= 4; i++) {
-            document.querySelector(`#player-name${i}`).textContent = "";
-            document.querySelector(`#score${i}`).innerText = "";
-        }
-        saveNames(names);
-        currentPlayer = 1;
-        updateMessage(`Current turn: ${names[0]}`);
-    }
+function resetGame() {
+  localStorage.clear();
+  location.reload();
+}
 
-    function resetGame() {
-        localStorage.clear();
-        location.reload();
-    }
+function playGame() {
+  if (isGameOver()) {
+    updateMessage("Game over! Please reset to play again.");
+    return;
+  }
 
-    function playGame() {
-        if (document.querySelector("#loose").textContent.includes("WINS")) {
-            updateMessage("Game over! Please reset to play again.");
-            return;
-        }
-        const diceImages = document.querySelectorAll("img");
-        let dice1 = Math.floor(Math.random() * 6) + 1;
-        let dice2 = Math.floor(Math.random() * 6) + 1;
+  const diceImages = document.querySelectorAll("img");
+  let dice1 = Math.floor(Math.random() * 6) + 1;
+  let dice2 = Math.floor(Math.random() * 6) + 1;
 
-        if (currentPlayer === 1) {
-            diceImages[0].setAttribute("src", "images/dice" + dice1 + ".png");
-            diceImages[1].setAttribute("src", "images/dice" + dice2 + ".png");
-            calculateScore(dice1, dice2, ListFirstPlayer, document.querySelector("#player-name1").textContent);
-        } else if (currentPlayer === 2) {
-            diceImages[2].setAttribute("src", "images/dice" + dice1 + ".png");
-            diceImages[3].setAttribute("src", "images/dice" + dice2 + ".png");
-            calculateScore(dice1, dice2, ListSecondPlayer, document.querySelector("#player-name2").textContent);
-        } else if (currentPlayer === 3 && playerCount >= 3) {
-            diceImages[4].setAttribute("src", "images/dice" + dice1 + ".png");
-            diceImages[5].setAttribute("src", "images/dice" + dice2 + ".png");
-            calculateScore(dice1, dice2, ListThirdPlayer, document.querySelector("#player-name3").textContent);
-        } else if (currentPlayer === 4 && playerCount === 4) {
-            diceImages[6].setAttribute("src", "images/dice" + dice1 + ".png");
-            diceImages[7].setAttribute("src", "images/dice" + dice2 + ".png");
-            calculateScore(dice1, dice2, ListFourthPlayer, document.querySelector("#player-name4").textContent);
-        }
+  if (currentPlayer === 1) {
+    diceImages[0].setAttribute("src", "images/dice" + dice1 + ".png");
+    diceImages[1].setAttribute("src", "images/dice" + dice2 + ".png");
+    calculateScore(dice1, dice2, ListFirstPlayer, document.querySelector("#player-name1").textContent);
+  } else if (currentPlayer === 2) {
+    diceImages[2].setAttribute("src", "images/dice" + dice1 + ".png");
+    diceImages[3].setAttribute("src", "images/dice" + dice2 + ".png");
+    calculateScore(dice1, dice2, ListSecondPlayer, document.querySelector("#player-name2").textContent);
+  } else if (currentPlayer === 3 && playerCount >= 3) {
+    diceImages[4].setAttribute("src", "images/dice" + dice1 + ".png");
+    diceImages[5].setAttribute("src", "images/dice" + dice2 + ".png");
+    calculateScore(dice1, dice2, ListThirdPlayer, document.querySelector("#player-name3").textContent);
+  } else if (currentPlayer === 4 && playerCount === 4) {
+    diceImages[6].setAttribute("src", "images/dice" + dice1 + ".png");
+    diceImages[7].setAttribute("src", "images/dice" + dice2 + ".png");
+    calculateScore(dice1, dice2, ListFourthPlayer, document.querySelector("#player-name4").textContent);
+  }
 
-        loose();
+  loose();
 
-        // Move to next player
-        currentPlayer++;
-        if (currentPlayer > playerCount) currentPlayer = 1;
+  if (!isGameOver()) {
+    currentPlayer++;
+    if (currentPlayer > playerCount) currentPlayer = 1;
+    let nextName = document.querySelector(`#player-name${currentPlayer}`).textContent;
+    updateMessage(`Current turn: ${nextName}`);
+  }
+}
 
-        // If no winner yet, show whose turn
-        if (!document.querySelector("#loose").textContent.includes("WINS")) {
-            let nextName = document.querySelector(`#player-name${currentPlayer}`).textContent;
-            updateMessage(`Current turn: ${nextName}`);
-        }
-    }
+function calculateScore(dice1, dice2, playerList, playerName) {
+  const looseText = document.querySelector("#loose");
 
-    function calculateScore(dice1, dice2, playerList, playerName) {
-        if (dice1 === 1 && dice2 === 1) {
-            playerList.push(25);
-            updateMessage(`${playerName} rolled double ones! You get 25 points!`);
-        } else if (dice1 === dice2) {
-            const score = (dice1 + dice2) * 2;
-            playerList.push(score);
-            updateMessage(`${playerName} gets ${score} points for doubles!`);
-        } else if (dice1 === 1 || dice2 === 1) {
-            updateMessage(`${playerName} loses all points for this round because of a "1"!`);
-            playerList.push(0);
-        } else {
-            const score = dice1 + dice2;
-            playerList.push(score);
-            updateMessage(`${playerName} gets ${score} points.`);
-        }
-    }
+  if (dice1 === 1 && dice2 === 1) {
+    playerList.push(25);
+    updateMessage(`${playerName} rolled double ones! You get 25 points!`);
+  } else if (dice1 === dice2) {
+    const score = (dice1 + dice2) * 2;
+    playerList.push(score);
+    updateMessage(`${playerName} gets ${score} points for doubles!`);
+  } else if (dice1 === 1 || dice2 === 1) {
+    updateMessage(`${playerName} rolled a 1 and LOSES! Game over.`);
+    playerList.push(0);
+    looseText.textContent = `${playerName} LOSES! Game over.`;
+  } else {
+    const score = dice1 + dice2;
+    playerList.push(score);
+    updateMessage(`${playerName} gets ${score} points.`);
+  }
+}
 
-    function saveNames(names) {
-        for (let i = 0; i < names.length; i++) {
-            localStorage.setItem(`player${i + 1}`, names[i]);
-        }
-        updateMessage("Names saved: " + names.join(", "));
-    }
+function saveNames(names) {
+  for (let i = 0; i < names.length; i++) {
+    localStorage.setItem(`player${i + 1}`, names[i]);
+  }
+  updateMessage("Names saved: " + names.join(", "));
+}
+
 </script>
 </body>
 </html>
